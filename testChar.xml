@@ -1,0 +1,9 @@
+<character>
+	<name> Michael </name>
+	<attack> 50 </attack>
+	<hp> 120 </hp>
+	<init> 50 </init>
+	<def> 5 </def>
+	<class>3</class>
+	<size> 2 </size>
+</character>
