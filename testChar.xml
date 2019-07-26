@@ -4,6 +4,6 @@
 	<hp> 120 </hp>
 	<init> 50 </init>
 	<def> 5 </def>
-	<class>3</class>
+	<class>wholeArea </class>
 	<size> 2 </size>
 </character>
