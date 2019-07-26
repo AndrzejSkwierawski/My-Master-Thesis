@@ -29,6 +29,7 @@ place_character_in_spot(Spots, [1, 1], x)
 place_character_in_spot(OponentSpots, [1, 1], y)
 place_character_in_spot(Spots, [0, 0], y)
 place_character_in_spot(Spots, [1, 2], z)
+place_character_in_spot(Spots, [1, 1], z) # this should create warinig
 
 print_team_matrix(Spots)
 print_oponent_team(OponentSpots)

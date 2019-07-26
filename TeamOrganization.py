@@ -19,7 +19,7 @@ def place_character_in_spot(team, spot, character):
             team[spot[0]][spot[1]].Character = character
             team[spot[0]][spot[1]].isTaken = True
     else:
-        if team[0][spot[1]].is_taken or team[1][spot[1]].is_taken:
+        if any([x.is_taken for x in team[:, spot[1]]]):
             warnings.warn("CANNOT PLACE THIS CHARACTER HERE")
         else:
             team[0][spot[1]].Character = character
