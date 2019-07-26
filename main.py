@@ -3,6 +3,7 @@ import numpy as np
 
 x = Character(name="Michael", hp=100)
 y = Character(name="Adison", hp=90, deff=50)
+z = Character(name="gruby", size=2)
 
 # 1 2     2 1
 # 3 4     4 3
@@ -24,16 +25,18 @@ create_spots(Spots)
 create_spots(OponentSpots)
 
 
-place_character_in_spot(Spots[1][1], x)
-place_character_in_spot(OponentSpots[1][1], y)
+place_character_in_spot(Spots, [1, 1], x)
+place_character_in_spot(OponentSpots, [1, 1], y)
+place_character_in_spot(Spots, [0, 0], y)
+place_character_in_spot(Spots, [1, 2], z)
 
 print_team_matrix(Spots)
 print_oponent_team(OponentSpots)
 
-# y.print_properties()
+z.print_properties()
 
-x.attack_character(OponentSpots[1][1].Character)
-y.print_properties()
+x.attack_character(Spots[1][2].Character)
+
 # x.attack_character(OponentSpots[0][1].Character)
 
 
