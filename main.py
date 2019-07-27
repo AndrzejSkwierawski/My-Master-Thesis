@@ -15,7 +15,8 @@ z = Character(name="gruby", size=2)
 # 3 6    6 3
 # if the index of character is from 4 to 6 it stands in first line
 
-# the second model is more useful, while we check for reachable characters we just have to solve difference between indexes
+# the second model is more useful, while we check for reachable
+# characters we just have to solve difference between indexes
 
 # Creating new table of spots
 Spots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
@@ -26,13 +27,13 @@ create_spots(OponentSpots)
 
 import_team_from_xml("testTeam.xml", Spots)
 import_team_from_xml("testTeam.xml", OponentSpots)
-
+export_team_to_xml(Spots, "exportTeam.xml")
+export_character_to_xml(Spots[0][0].Character, "export.xml")
 # place_character_in_spot(Spots, [1, 1], x)
 # place_character_in_spot(OponentSpots, [1, 1], y)
 # place_character_in_spot(Spots, [0, 0], y)
 # place_character_in_spot(Spots, [1, 2], z)
 # place_character_in_spot(Spots, [1, 1], z) # this should create warinig
-
 
 
 print_team_matrix(Spots)

@@ -1,5 +1,5 @@
 <team>
-    <tr>
+    <tl>
         <name> Big Mamma </name>
         <attack> 50 </attack>
         <hp> 120 </hp>
@@ -7,7 +7,7 @@
         <def> 5 </def>
         <class> wholeArea </class>
         <size> 2 </size>
-    </tr>
+    </tl>
     <cl>
         <name> Archer </name>
         <attack> 20 </attack>
@@ -23,7 +23,7 @@
         <hp> 90 </hp>
         <init> 50 </init>
         <def> 0 </def>
-        <class> longDistance </class>
+        <class> shortDistance </class>
         <size> 1 </size>
     </cr>
     <bl>
@@ -41,7 +41,7 @@
         <hp> 90 </hp>
         <init> 50 </init>
         <def> 0 </def>
-        <class> longDistance </class>
+        <class> shortDistance </class>
         <size> 1 </size>
     </br>
 </team>

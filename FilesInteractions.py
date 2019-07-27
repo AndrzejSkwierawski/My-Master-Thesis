@@ -36,7 +36,8 @@ def export_character_to_xml(character, xml):
     ET.SubElement(root, "hp").text = str(character.HP)
     ET.SubElement(root, "init").text = str(character.Init)
     ET.SubElement(root, "def").text = str(character.Deff)
-    ET.SubElement(root, "class").text = str([key for (key, value) in character.ClassEnumerate.items() if value == 1][0])
+    ET.SubElement(root, "class").text =\
+        [key for (key, value) in character.ClassEnumerate.items() if value == character.Class][0]
     ET.SubElement(root, "size").text = str(character.Size)
     tree = ET.ElementTree(root)
     tree.write(xml)
@@ -82,3 +83,26 @@ def import_team_from_xml(xml, team):
         warnings.warn("INVALID FORMAT: cannot parse xml. Xml root name not recognised.", UserWarning)
 
 
+def export_team_to_xml(team, xml):
+    pattern = ['tl', 'tr', 'cl', 'cr', 'bl', 'br']
+    iteration = 0
+    root = ET.Element("team")
+    for row in range(ROWS):
+        for column in range(COLUMNS):
+            character = team[column][row].Character
+            spot = ET.SubElement(root, pattern[iteration])
+            ET.SubElement(spot, "name").text = character.Name
+            ET.SubElement(spot, "attack").text = str(character.Attack)
+            ET.SubElement(spot, "hp").text = str(character.HP)
+            ET.SubElement(spot, "init").text = str(character.Init)
+            ET.SubElement(spot, "def").text = str(character.Deff)
+            ET.SubElement(spot, "class").text =\
+                str([key for (key, value) in character.ClassEnumerate.items() if value == character.Class][0])
+            ET.SubElement(spot, "size").text = str(character.Size)
+            if team[column, row].Character.Size == 1:
+                iteration += 1
+            else:
+                iteration += 2
+                break
+    tree = ET.ElementTree(root)
+    tree.write(xml)
