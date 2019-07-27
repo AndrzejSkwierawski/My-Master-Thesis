@@ -1,10 +1,9 @@
-from FilesInteractions import *
 import numpy as np
+from FilesInteractions import *
+from FieldDrowing import *
 
-x = Character(name="Bary", hp=100)
-y = Character(name="Adison", hp=90, deff=50)
-z = Character(name="gruby", size=2)
 
+init()
 # 1 2     2 1
 # 3 4     4 3
 # 5 6     6 5
@@ -29,6 +28,11 @@ import_team_from_xml("testTeam.xml", Spots)
 import_team_from_xml("testTeam.xml", OponentSpots)
 export_team_to_xml(Spots, "exportTeam.xml")
 export_character_to_xml(Spots[0][0].Character, "export.xml")
+
+
+x = Character(name="Bary", hp=100)
+y = Character(name="Adison", hp=90, deff=50)
+z = Character(name="gruby", size=2)
 # place_character_in_spot(Spots, [1, 1], x)
 # place_character_in_spot(OponentSpots, [1, 1], y)
 # place_character_in_spot(Spots, [0, 0], y)
