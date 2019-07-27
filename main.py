@@ -1,7 +1,7 @@
-from TeamOrganization import *
+from FilesInteractions import *
 import numpy as np
 
-x = Character(name="Michael", hp=100)
+x = Character(name="Bary", hp=100)
 y = Character(name="Adison", hp=90, deff=50)
 z = Character(name="gruby", size=2)
 
@@ -24,19 +24,23 @@ OponentSpots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
 create_spots(Spots)
 create_spots(OponentSpots)
 
+import_team_from_xml("testTeam.xml", Spots)
+import_team_from_xml("testTeam.xml", OponentSpots)
 
-place_character_in_spot(Spots, [1, 1], x)
-place_character_in_spot(OponentSpots, [1, 1], y)
-place_character_in_spot(Spots, [0, 0], y)
-place_character_in_spot(Spots, [1, 2], z)
-place_character_in_spot(Spots, [1, 1], z) # this should create warinig
+# place_character_in_spot(Spots, [1, 1], x)
+# place_character_in_spot(OponentSpots, [1, 1], y)
+# place_character_in_spot(Spots, [0, 0], y)
+# place_character_in_spot(Spots, [1, 2], z)
+# place_character_in_spot(Spots, [1, 1], z) # this should create warinig
+
+
 
 print_team_matrix(Spots)
 print_oponent_team(OponentSpots)
 
 z.print_properties()
 
-x.attack_character(Spots[1][2].Character)
+# x.attack_character(Spots[1][2].Character)
 
 # x.attack_character(OponentSpots[0][1].Character)
 

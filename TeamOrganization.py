@@ -27,6 +27,7 @@ def place_character_in_spot(team, spot, character):
             team[0][spot[1]].isTaken = True
             team[1][spot[1]].isTaken = True
 
+
 def print_team_matrix(matrix):
     print("----------------------------")
     for row in range(ROWS):
@@ -74,5 +75,4 @@ class Spot:
     def print_status(self):
         print(self.is_taken)
 
-# TODO: make loading characters from file
 # TODO: make placing characters in field from file

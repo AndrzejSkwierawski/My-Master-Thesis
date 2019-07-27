@@ -1,4 +1,5 @@
 from Character import *
+from TeamOrganization import *
 import xml.etree.ElementTree as ET
 
 
@@ -10,22 +11,22 @@ def import_character_from_xml(xml, character):
             if child.tag == "name":
                 character.Name = child.text.strip()
             elif child.tag == "attack":
-                character.Attack = child.text.strip()
+                character.Attack = int(child.text.strip())
             elif child.tag == "hp":
-                character.HP = character.currentHP = child.text.strip()
+                character.HP = character.currentHP = int(child.text.strip())
             elif child.tag == "init":
-                character.Init = child.text.strip()
+                character.Init = int(child.text.strip())
             elif child.tag == "def":
-                character.Deff = child.text.strip()
+                character.Deff = int(child.text.strip())
             elif child.tag == "class":
                 if child.text.strip() in character.ClassEnumerate:
                     character.Class = character.ClassEnumerate[child.text.strip()]
                 else:
                     warnings.warn("INVALID FORMAT: class name not recognised", UserWarning)
             elif child.tag == "size":
-                character.Size = child.text.strip()
+                character.Size = int(child.text.strip())
     else:
-        warnings.warn("INVALID FORMAT: cannot parse xml. Xml root name '" + root.tag + "' not recognised", UserWarning)
+        warnings.warn("INVALID FORMAT: cannot parse xml. Xml root name not recognised.", UserWarning)
 
 
 def export_character_to_xml(character, xml):
@@ -41,8 +42,43 @@ def export_character_to_xml(character, xml):
     tree.write(xml)
 
 
-y = Character(name="Błażej", attack=0)
-export_character_to_xml(y, "export.xml")
-x = Character()
-import_character_from_xml("export.xml", x)
-x.print_properties()
+def import_team_from_xml(xml, team):
+    tree = ET.parse(xml)
+    root = tree.getroot()
+    if root.tag == "team":
+        for child in root:
+            character = Character()
+            for option in child:
+                if option.tag == "name":
+                    character.Name = option.text.strip()
+                elif option.tag == "attack":
+                    character.Attack = int(option.text.strip())
+                elif option.tag == "hp":
+                    character.HP = character.currentHP = int(option.text.strip())
+                elif option.tag == "init":
+                    character.Init = int(option.text.strip())
+                elif option.tag == "def":
+                    character.Deff = int(option.text.strip())
+                elif option.tag == "class":
+                    if option.text.strip() in character.ClassEnumerate:
+                        character.Class = character.ClassEnumerate[option.text.strip()]
+                    else:
+                        warnings.warn("INVALID FORMAT: class name not recognised", UserWarning)
+                elif option.tag == "size":
+                    character.Size = int(option.text.strip())
+            if child.tag == "tl":
+                place_character_in_spot(team, [0, 0], character)
+            elif child.tag == "tr":
+                place_character_in_spot(team, [1, 0], character)
+            elif child.tag == "cl":
+                place_character_in_spot(team, [0, 1], character)
+            elif child.tag == "cr":
+                place_character_in_spot(team, [1, 1], character)
+            elif child.tag == "bl":
+                place_character_in_spot(team, [0, 2], character)
+            elif child.tag == "br":
+                place_character_in_spot(team, [1, 2], character)
+    else:
+        warnings.warn("INVALID FORMAT: cannot parse xml. Xml root name not recognised.", UserWarning)
+
+
