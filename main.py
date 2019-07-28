@@ -3,20 +3,6 @@ from FilesInteractions import *
 from FieldDrowing import *
 
 
-init()
-# 1 2     2 1
-# 3 4     4 3
-# 5 6     6 5
-# if the index is devided by 2 the character stands in first line
-
-# 1 4    4 1
-# 2 5    5 2
-# 3 6    6 3
-# if the index of character is from 4 to 6 it stands in first line
-
-# the second model is more useful, while we check for reachable
-# characters we just have to solve difference between indexes
-
 # Creating new table of spots
 Spots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
 OponentSpots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
@@ -26,6 +12,15 @@ create_spots(OponentSpots)
 
 import_team_from_xml("testTeam.xml", Spots)
 import_team_from_xml("testTeam.xml", OponentSpots)
+Spots[0][0].Character.attack_character(OponentSpots[0][0].Character)
+Spots[0][0].Character.attack_character(OponentSpots[1][0].Character)
+Spots[0][0].Character.attack_character(OponentSpots[1][1].Character)
+
+
+init(Spots, OponentSpots)
+
+
+
 export_team_to_xml(Spots, "exportTeam.xml")
 export_character_to_xml(Spots[0][0].Character, "export.xml")
 
