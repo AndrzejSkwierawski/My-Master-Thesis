@@ -1,4 +1,3 @@
-from Character import *
 from TeamOrganization import *
 import xml.etree.ElementTree as ET
 
@@ -25,6 +24,7 @@ def import_character_from_xml(xml, character):
                     warnings.warn("INVALID FORMAT: class name not recognised", UserWarning)
             elif child.tag == "size":
                 character.Size = int(child.text.strip())
+            character.set_image()
     else:
         warnings.warn("INVALID FORMAT: cannot parse xml. Xml root name not recognised.", UserWarning)
 
@@ -67,6 +67,7 @@ def import_team_from_xml(xml, team):
                         warnings.warn("INVALID FORMAT: class name not recognised", UserWarning)
                 elif option.tag == "size":
                     character.Size = int(option.text.strip())
+                character.set_image()
             if child.tag == "tl":
                 place_character_in_spot(team, [0, 0], character)
             elif child.tag == "tr":

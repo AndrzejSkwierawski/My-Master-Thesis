@@ -17,6 +17,7 @@ class Character:
     currentHP = HP
     # TODO: In Future version make also current init, Deff and so on
     # ----------------------------
+    Image = 'images/warrior.jpg'
 
     def __init__(self, name="Dave", attack=25, hp=100, init=50, deff=0, class_r=ClassEnumerate["shortDistance"], size=1):
         self.Name = name
@@ -46,3 +47,11 @@ class Character:
                 target_char.currentHP = 0
         else:
             warnings.warn("THIS CHARACTER IS ALREADY DEAD")
+
+    def set_image(self):
+        if self.Class == 1:
+            self.Image = 'images/warrior.jpg'
+        elif self.Class == 2:
+            self.Image = 'images/archer.jpg'
+        elif self.Class == 3:
+            self.Image = 'images/mage.jpg'
