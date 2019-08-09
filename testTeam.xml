@@ -1,6 +1,6 @@
 <team>
     <tl>
-        <name> Big Mamma </name>
+        <name> Big Mamma1</name>
         <attack> 50 </attack>
         <hp> 120 </hp>
         <init> 35 </init>
@@ -9,7 +9,7 @@
         <size> 2 </size>
     </tl>
     <cl>
-        <name> Archer </name>
+        <name> Archer1 </name>
         <attack> 20 </attack>
         <hp> 70 </hp>
         <init> 60 </init>
@@ -18,7 +18,7 @@
         <size> 1 </size>
     </cl>
     <cr>
-        <name> Warrior </name>
+        <name> Warrior1 </name>
         <attack> 30 </attack>
         <hp> 90 </hp>
         <init> 50 </init>
@@ -27,7 +27,7 @@
         <size> 1 </size>
     </cr>
     <bl>
-        <name> Magus </name>
+        <name> Magus1 </name>
         <attack> 15 </attack>
         <hp> 65 </hp>
         <init> 40 </init>
@@ -36,7 +36,7 @@
         <size> 1 </size>
     </bl>
     <br>
-        <name> Warrior </name>
+        <name> Warrior1 </name>
         <attack> 30 </attack>
         <hp> 90 </hp>
         <init> 50 </init>

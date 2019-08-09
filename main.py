@@ -8,17 +8,11 @@ OponentSpots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
 # making each spot free
 create_spots(Spots)
 create_spots(OponentSpots)
-
+# importing team from xml
 import_team_from_xml("testTeam.xml", Spots)
 import_team_from_xml("testTeam2.xml", OponentSpots)
-Spots[0][0].Character.attack_character(OponentSpots[0][0].Character)
-Spots[0][0].Character.attack_character(OponentSpots[1][0].Character)
-Spots[0][0].Character.attack_character(OponentSpots[1][1].Character)
-
 
 init(Spots, OponentSpots)
-
-
 
 export_team_to_xml(Spots, "exportTeam.xml")
 export_character_to_xml(Spots[0][0].Character, "export.xml")

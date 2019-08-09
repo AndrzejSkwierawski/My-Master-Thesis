@@ -74,5 +74,3 @@ class Spot:
 
     def print_status(self):
         print(self.is_taken)
-
-# TODO: make placing characters in field from file

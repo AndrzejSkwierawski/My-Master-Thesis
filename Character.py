@@ -19,6 +19,8 @@ class Character:
     # ----------------------------
     Image = 'images/warrior.jpg'
 
+    Position = (0, 0)
+
     def __init__(self, name="Dave", attack=25, hp=100, init=50, deff=0, class_r=ClassEnumerate["shortDistance"], size=1):
         self.Name = name
         self.Attack = attack
@@ -28,6 +30,9 @@ class Character:
         self.Class = class_r
         self.Size = size
         self.currentHP = hp
+
+    def __repr__(self):
+        return repr((self.Name, self.Attack, self.currentHP, "/", self.HP, self.Init, self.Deff, self.Class, self.Size))
 
     def print_properties(self):
         print("Name: ", self.Name)

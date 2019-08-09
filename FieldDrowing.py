@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 from TeamOrganization import *
+from Order import *
 pygame.init()
 
 (width, height) = (800, 600)
@@ -21,6 +22,7 @@ bg_color = (255, 255, 255)
 character_bg_color = (192, 192, 192)
 hpbar_bgcolor = (255, 255, 0)
 hpbar_color = (255, 0, 0)
+current_char_clolor = (116, 32, 169)
 
 font = pygame.font.SysFont("calibri", 20)
 
@@ -29,24 +31,33 @@ screen = pygame.display.set_mode((width, height))
 (player, cpu) = ([], [])
 
 
+
 def init(team1, team2):
+    global pteam
+    global cteam
+    pteam = team1
+    cteam = team2
     running = True
     screen.fill(bg_color)
     print_bg()
-    print_player_team(team1)
-    print_cpu_team(team2)
-    print(player, cpu)
+    print_player_team(pteam)
+    print_cpu_team(cteam)
+    set_move_order(pteam, cteam)
+    # print(player, cpu)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
         pos = pygame.mouse.get_pos()
-        check_team(pos, player, team1)
-        check_team(pos, cpu, team2)
+
+        check_team(pos, player, pteam)
+        check_team(pos, cpu, cteam)
+        mark_current_character()
         pygame.display.flip()
 
 
+# checks if mouse is over character
 def check_team(cursor, team, matrix):
     for ch in team:
         if is_cursor_over(cursor, ch):
@@ -66,6 +77,11 @@ def check_team(cursor, team, matrix):
             if character.isTaken:
                 print_info(character.Character)
 
+                ev = pygame.event.get()
+                for event in ev:
+                    if event.type == pygame.MOUSEBUTTONUP:
+                        attack(character.Character)
+
 
 def is_cursor_over(cursor, rect):
     left = rect[0][0]
@@ -76,6 +92,17 @@ def is_cursor_over(cursor, rect):
         return True
     else:
         return False
+
+
+def attack(character):
+    characters[0].attack_character(character)
+    characters.__delitem__(0)
+    if len(characters) == 0:
+        set_move_order(pteam, cteam)
+    screen.fill(bg_color)
+    print_bg()
+    print_player_team(pteam)
+    print_cpu_team(cteam)
 
 
 def print_bg():
@@ -105,6 +132,7 @@ def print_player_team(team):
                 if character.Size == 1:
                     char_img = pygame.transform.scale(char_img, (char_width, char_height))
                     screen.blit(char_img, (player_start_pos[i][0], player_start_pos[i][1]))
+                    character.Position = player_start_pos[i]
 
                     pygame.draw.rect(screen, hpbar_color,
                                      pygame.Rect(player_start_pos[i][0], player_start_pos[i][1] + hpbar_diference,
@@ -113,6 +141,7 @@ def print_player_team(team):
                     if column != 1:
                         char_img = pygame.transform.scale(char_img, (char_width2, char_height2))
                         screen.blit(char_img, (player_start_pos[i][0], player_start_pos[i][1]))
+                        character.Position = player_start_pos[i]
 
                         pygame.draw.rect(screen, hpbar_color, pygame.Rect(player_start_pos[i][0], player_start_pos[i][1] + hpbar_diference,
                                                                           hpbar_width2 * (character.currentHP / character.HP), hpbar_hight))
@@ -130,6 +159,7 @@ def print_cpu_team(team):
                     char_img = pygame.transform.scale(char_img, (char_width, char_height))
                     char_img = pygame.transform.flip(char_img, True, False)
                     screen.blit(char_img, (cpu_start_pos[i][0], cpu_start_pos[i][1]))
+                    character.Position = cpu_start_pos[i]
 
                     pygame.draw.rect(screen, hpbar_color,
                                      pygame.Rect(cpu_start_pos[i][0], cpu_start_pos[i][1] + hpbar_diference,
@@ -140,6 +170,7 @@ def print_cpu_team(team):
                         char_img = pygame.transform.scale(char_img, (char_width2, char_height2))
                         char_img = pygame.transform.flip(char_img, True, False)
                         screen.blit(char_img, (cpu_start_pos[i][0], cpu_start_pos[i][1]))
+                        character.Position = cpu_start_pos[i]
 
                         pygame.draw.rect(screen, hpbar_color,
                                          pygame.Rect(cpu_start_pos[i][0], cpu_start_pos[i][1] + hpbar_diference,
@@ -172,3 +203,8 @@ def print_info(character):
     screen.blit(init, (260, 530))
 
 
+def mark_current_character():
+    if characters[0].Size == 1:
+        pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width, 10)))
+    else:
+        pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width2, 10)))
