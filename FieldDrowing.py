@@ -43,6 +43,7 @@ def init(team1, team2):
     print_player_team(pteam)
     print_cpu_team(cteam)
     set_move_order(pteam, cteam)
+    match = True
     # print(player, cpu)
     while running:
         for event in pygame.event.get():
@@ -51,9 +52,18 @@ def init(team1, team2):
 
         pos = pygame.mouse.get_pos()
 
-        check_team(pos, player, pteam)
-        check_team(pos, cpu, cteam)
-        mark_current_character()
+        if match:
+            check_team(pos, player, pteam)
+            check_team(pos, cpu, cteam)
+            mark_current_character()
+
+        if not check_win() == 0:
+            match = False
+            screen.fill(bg_color)
+            if check_win() == 1:
+                screen.blit(font.render("WIN", False, (0, 0, 0)), (0, 0))
+            elif check_win() == -1:
+                screen.blit(font.render("LOST", False, (0, 0, 0)), (0, 0))
         pygame.display.flip()
 
 
@@ -77,9 +87,9 @@ def check_team(cursor, team, matrix):
             if character.isTaken:
                 print_info(character.Character)
 
-                ev = pygame.event.get()
-                for event in ev:
-                    if event.type == pygame.MOUSEBUTTONUP:
+                event = pygame.event.get()
+                for event in event:
+                    if event.type == pygame.MOUSEBUTTONUP and character.isTaken:
                         attack(character.Character)
 
 
@@ -95,14 +105,26 @@ def is_cursor_over(cursor, rect):
 
 
 def attack(character):
-    characters[0].attack_character(character)
-    characters.__delitem__(0)
-    if len(characters) == 0:
-        set_move_order(pteam, cteam)
-    screen.fill(bg_color)
-    print_bg()
-    print_player_team(pteam)
-    print_cpu_team(cteam)
+    if characters[0].attack_character(character) == 0:
+        characters.__delitem__(0)
+        for each in characters:
+            if not each.Alive:
+                characters.remove(each)
+        if len(characters) == 0:
+            set_move_order(pteam, cteam)
+        screen.fill(bg_color)
+        print_bg()
+        print_player_team(pteam)
+        print_cpu_team(cteam)
+
+
+def check_win():
+    if all(all(not item.Character.Alive or not item.isTaken for item in items) for items in cteam):
+        return 1
+    if all(all(not item.Character.Alive or not item.isTaken for item in items) for items in pteam):
+        return -1
+    else:
+        return 0
 
 
 def print_bg():

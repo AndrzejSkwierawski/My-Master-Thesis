@@ -50,8 +50,10 @@ class Character:
             if target_char.currentHP <= 0:
                 target_char.Alive = False
                 target_char.currentHP = 0
+            return 0
         else:
             warnings.warn("THIS CHARACTER IS ALREADY DEAD")
+            return -1
 
     def set_image(self):
         if self.Class == 1:
