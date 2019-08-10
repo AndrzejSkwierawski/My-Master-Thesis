@@ -54,12 +54,6 @@ def init(team1, team2):
 
         pos = pygame.mouse.get_pos()
 
-        if match:
-            check_team(pos, player, pteam)
-            check_team(pos, cpu, cteam)
-            mark_current_character()
-            mark_reachable(characters[0])
-
         if not check_win() == 0:
             match = False
             screen.fill(bg_color)
@@ -67,6 +61,13 @@ def init(team1, team2):
                 screen.blit(font.render("WIN", False, (0, 0, 0)), (0, 0))
             elif check_win() == -1:
                 screen.blit(font.render("LOST", False, (0, 0, 0)), (0, 0))
+
+        if match:
+            check_team(pos, player, pteam)
+            check_team(pos, cpu, cteam)
+            mark_current_character()
+            mark_reachable(characters[0])
+
         pygame.display.flip()
 
 
@@ -277,7 +278,7 @@ def mark_reachable(character):
         else:
             if any(item.isTaken and item.Character.Alive for item in oponent_team[1]):
                 line = 1
-            elif any(item.isTaken and item.Character.Alive for item in oponent_team[0]):
+            else:
                 line = 0
 
             if current_position[1] == 0:

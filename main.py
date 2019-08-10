@@ -11,7 +11,7 @@ create_spots(Spots)
 create_spots(OponentSpots)
 # importing team from xml
 import_team_from_xml("testTeam.xml", Spots)
-import_team_from_xml("testTeam2.xml", OponentSpots)
+import_team_from_xml("testTeam.xml", OponentSpots)
 
 init(Spots, OponentSpots)
 
