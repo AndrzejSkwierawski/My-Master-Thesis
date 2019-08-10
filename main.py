@@ -1,5 +1,6 @@
 from FilesInteractions import *
 from FieldDrowing import *
+import numpy as np
 
 
 # Creating new table of spots

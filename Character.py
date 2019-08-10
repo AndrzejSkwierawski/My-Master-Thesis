@@ -20,6 +20,7 @@ class Character:
     Image = 'images/warrior.jpg'
 
     Position = (0, 0)
+    CanBeReached = False
 
     def __init__(self, name="Dave", attack=25, hp=100, init=50, deff=0, class_r=ClassEnumerate["shortDistance"], size=1):
         self.Name = name

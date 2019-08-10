@@ -1,5 +1,4 @@
 import pygame
-import numpy as np
 from TeamOrganization import *
 from Order import *
 pygame.init()
@@ -20,9 +19,10 @@ cpu_start_pos = [(550, 50), (550, 180), (550, 310), (450, 50), (450, 180), (450,
 
 bg_color = (255, 255, 255)
 character_bg_color = (192, 192, 192)
-hpbar_bgcolor = (255, 255, 0)
+hpbar_bgcolor = (232, 232, 111)
 hpbar_color = (255, 0, 0)
 current_char_clolor = (116, 32, 169)
+reachable_char_color = (85, 226, 41)
 
 font = pygame.font.SysFont("calibri", 20)
 
@@ -37,12 +37,15 @@ def init(team1, team2):
     global cteam
     pteam = team1
     cteam = team2
+    print(pteam)
+    print(cteam)
     running = True
     screen.fill(bg_color)
     print_bg()
     print_player_team(pteam)
     print_cpu_team(cteam)
     set_move_order(pteam, cteam)
+    match = True
     # print(player, cpu)
     while running:
         for event in pygame.event.get():
@@ -51,9 +54,19 @@ def init(team1, team2):
 
         pos = pygame.mouse.get_pos()
 
-        check_team(pos, player, pteam)
-        check_team(pos, cpu, cteam)
-        mark_current_character()
+        if match:
+            check_team(pos, player, pteam)
+            check_team(pos, cpu, cteam)
+            mark_current_character()
+            mark_reachable(characters[0])
+
+        if not check_win() == 0:
+            match = False
+            screen.fill(bg_color)
+            if check_win() == 1:
+                screen.blit(font.render("WIN", False, (0, 0, 0)), (0, 0))
+            elif check_win() == -1:
+                screen.blit(font.render("LOST", False, (0, 0, 0)), (0, 0))
         pygame.display.flip()
 
 
@@ -77,9 +90,9 @@ def check_team(cursor, team, matrix):
             if character.isTaken:
                 print_info(character.Character)
 
-                ev = pygame.event.get()
-                for event in ev:
-                    if event.type == pygame.MOUSEBUTTONUP:
+                event = pygame.event.get()
+                for event in event:
+                    if event.type == pygame.MOUSEBUTTONUP and character.isTaken:
                         attack(character.Character)
 
 
@@ -95,14 +108,37 @@ def is_cursor_over(cursor, rect):
 
 
 def attack(character):
-    characters[0].attack_character(character)
-    characters.__delitem__(0)
+    if character.CanBeReached:
+        if characters[0].Class == 1 or characters[0].Class == 2:
+            characters[0].attack_character(character)
+            characters.__delitem__(0)
+        elif characters[0].Class == 3:
+            for column in range(COLUMNS):
+                for row in range(ROWS):
+                    for team in pteam, cteam:
+                        if team[column][row].Character.CanBeReached:
+                            characters[0].attack_character(team[column][row].Character)
+            characters.__delitem__(0)
+
+    for each in characters:
+        if not each.Alive:
+            characters.remove(each)
     if len(characters) == 0:
         set_move_order(pteam, cteam)
     screen.fill(bg_color)
     print_bg()
     print_player_team(pteam)
     print_cpu_team(cteam)
+
+
+
+def check_win():
+    if all(all(not item.Character.Alive or not item.isTaken for item in items) for items in cteam):
+        return 1
+    if all(all(not item.Character.Alive or not item.isTaken for item in items) for items in pteam):
+        return -1
+    else:
+        return 0
 
 
 def print_bg():
@@ -208,3 +244,73 @@ def mark_current_character():
         pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width, 10)))
     else:
         pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width2, 10)))
+
+
+def mark_reachable(character):
+    if any(any(item.Character == character for item in items) for items in pteam):
+        char_team = pteam
+        oponent_team = cteam
+    elif any(any(item.Character == character for item in items) for items in cteam):
+        char_team = cteam
+        oponent_team = pteam
+
+    for column in range(COLUMNS):
+        for row in range(ROWS):
+            oponent_team[column][row].Character.CanBeReached = False
+            char_team[column][row].Character.CanBeReached = False
+
+
+    if character.Class == 3 or character.Class == 2:
+        for column in range(COLUMNS):
+            for row in range(ROWS):
+                if oponent_team[column][row].isTaken and oponent_team[column][row].Character.Alive:
+                    oponent_team[column][row].Character.CanBeReached = True
+
+    elif character.Class == 1:
+        for column in range(COLUMNS):
+            for row in range(ROWS):
+                if character == char_team[column][row].Character:
+                    current_position = [column, row]
+        if current_position[0] == 0 and any(item.isTaken and item.Character.Alive for item in char_team[1]):
+            print("Short Distance character is blocked by own teammate")
+            # TODO: issue #6
+        else:
+            if any(item.isTaken and item.Character.Alive for item in oponent_team[1]):
+                line = 1
+            elif any(item.isTaken and item.Character.Alive for item in oponent_team[0]):
+                line = 0
+
+            if current_position[1] == 0:
+                if oponent_team[line][0].isTaken and oponent_team[line][0].Character.Alive:
+                    oponent_team[line][0].Character.CanBeReached = True
+                if oponent_team[line][1].isTaken and oponent_team[line][1].Character.Alive:
+                    oponent_team[line][1].Character.CanBeReached = True
+                if oponent_team[line][2].isTaken and oponent_team[line][2].Character.Alive and not \
+                        (oponent_team[line][1].isTaken and oponent_team[line][1].Character.Alive) and not \
+                        (oponent_team[line][0].isTaken and oponent_team[line][0].Character.Alive):
+                    oponent_team[line][2].Character.CanBeReached = True
+
+            elif current_position[1] == 1:
+                for rows in range(ROWS):
+                    if oponent_team[line][rows].Character.Alive and oponent_team[line][rows].isTaken:
+                        oponent_team[line][rows].Character.CanBeReached = True
+
+            elif current_position[1] == 2:
+                if oponent_team[line][2].isTaken and oponent_team[line][2].Character.Alive:
+                    oponent_team[line][2].Character.CanBeReached = True
+                if oponent_team[line][1].isTaken and oponent_team[line][1].Character.Alive:
+                    oponent_team[line][1].Character.CanBeReached = True
+                if oponent_team[line][0].isTaken and oponent_team[line][0].Character.Alive and not \
+                        (oponent_team[line][1].isTaken and oponent_team[line][1].Character.Alive) and not \
+                        (oponent_team[line][2].isTaken and oponent_team[line][2].Character.Alive):
+                    oponent_team[line][0].Character.CanBeReached = True
+
+    for column in range(COLUMNS):
+        for row in range(ROWS):
+            if oponent_team[column][row].Character.CanBeReached:
+                if oponent_team[column][row].Character.Size == 1:
+                    pygame.draw.rect(screen, reachable_char_color, pygame.Rect(oponent_team[column][row].Character.
+                                                                               Position, (char_width, 10)))
+                else:
+                    pygame.draw.rect(screen, reachable_char_color, pygame.Rect(oponent_team[column][row].Character.
+                                                                               Position, (char_width2, 10)))
