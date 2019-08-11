@@ -58,23 +58,34 @@ def init(team1, team2):
                 running = False
 
         pos = pygame.mouse.get_pos()
+        if len(characters) != 0:
+            if characters[0].flee:
+                for column in range(COLUMNS):
+                    for row in range(ROWS):
+                        for team in pteam, cteam:
+                            if len(characters) != 0:
+                                if team[column][row].Character == characters[0]:
+                                    team[column][row].isTaken = False
+                                    characters.__delitem__(0)
+                                    refresh()
+                                    break
+            if not check_win() == 0:
+                match = False
+                # screen.fill(bg_color)
+                if check_win() == 1:
+                    screen.blit(font.render("WIN", False, (0, 0, 0)), (0, 0))
+                elif check_win() == -1:
+                    screen.blit(font.render("LOST", False, (0, 0, 0)), (0, 0))
 
-        if not check_win() == 0:
-            match = False
-            screen.fill(bg_color)
-            if check_win() == 1:
-                screen.blit(font.render("WIN", False, (0, 0, 0)), (0, 0))
-            elif check_win() == -1:
-                screen.blit(font.render("LOST", False, (0, 0, 0)), (0, 0))
-
-        if match:
-            # button("Defense", (300, 100, 100, 45), button_color1, button_color2, pos)
-            mark_current_character()
-            mark_reachable(characters[0])
-            check_team(pos, player, pteam)
-            check_team(pos, cpu, cteam)
-
-
+            if match and len(characters) != 0:
+                characters[0].cancel_defence()
+                mark_current_character()
+                mark_reachable(characters[0])
+                check_team(pos, player, pteam)
+                check_team(pos, cpu, cteam)
+                button("Defense", (300, 100, 100, 45), button_color1, button_color2, "def")
+                button("Wait", (300, 150, 100, 45), button_color1, button_color2, "wait")
+                button("Flee", (300, 200, 100, 45), button_color1, button_color2, "flee")
         pygame.display.flip()
 
 
@@ -100,9 +111,32 @@ def check_team(cursor, team, matrix):
 
                 event = pygame.event.get()
                 for event in event:
-                    print(event)
                     if event.type == pygame.MOUSEBUTTONUP and character.isTaken:
                         attack(character.Character)
+
+
+def button(text, rect, color1, color2, action="none"):
+
+    if is_cursor_over(pygame.mouse.get_pos(), rect):
+        pygame.draw.rect(screen, color2, pygame.Rect(rect))
+        mouse = pygame.mouse.get_pressed()[0]
+        if mouse:
+            if action == "def":
+                characters[0].defence()
+            elif action == "wait":
+                characters.append(characters[0])
+            elif action == "flee":
+                characters[0].flee = True
+            characters.__delitem__(0)
+            if len(characters) == 0:
+                set_move_order(pteam, cteam)
+            refresh()
+
+    else:
+        pygame.draw.rect(screen, color1, pygame.Rect(rect))
+
+    message = font.render(text, True, (0, 0, 0))
+    screen.blit(message, ((rect[0] + rect[2]/6), (rect[1]) + rect[3]/3))
 
 
 def is_cursor_over(cursor, rect):
@@ -124,7 +158,7 @@ def attack(character):
             for column in range(COLUMNS):
                 for row in range(ROWS):
                     for team in pteam, cteam:
-                        if team[column][row].Character.CanBeReached:
+                        if team[column][row].Character.CanBeReached and team[column][row].Character.Alive:
                             characters[0].attack_character(team[column][row].Character)
         characters.__delitem__(0)
 
@@ -171,6 +205,8 @@ def print_player_team(team):
                 char_img = pygame.image.load(character.Image)
                 if character.Size == 1:
                     char_img = pygame.transform.scale(char_img, (char_width, char_height))
+                    if character.flee:
+                        char_img = pygame.transform.flip(char_img, True, False)
                     screen.blit(char_img, (player_start_pos[i][0], player_start_pos[i][1]))
                     character.Position = player_start_pos[i]
 
@@ -180,6 +216,8 @@ def print_player_team(team):
                 else:
                     if column != 1:
                         char_img = pygame.transform.scale(char_img, (char_width2, char_height2))
+                        if character.flee:
+                            char_img = pygame.transform.flip(char_img, True, False)
                         screen.blit(char_img, (player_start_pos[i][0], player_start_pos[i][1]))
                         character.Position = player_start_pos[i]
 
@@ -197,7 +235,8 @@ def print_cpu_team(team):
                 char_img = pygame.image.load(character.Image)
                 if character.Size == 1:
                     char_img = pygame.transform.scale(char_img, (char_width, char_height))
-                    char_img = pygame.transform.flip(char_img, True, False)
+                    if not character.flee:
+                        char_img = pygame.transform.flip(char_img, True, False)
                     screen.blit(char_img, (cpu_start_pos[i][0], cpu_start_pos[i][1]))
                     character.Position = cpu_start_pos[i]
 
@@ -208,7 +247,8 @@ def print_cpu_team(team):
                 else:
                     if column != 0:
                         char_img = pygame.transform.scale(char_img, (char_width2, char_height2))
-                        char_img = pygame.transform.flip(char_img, True, False)
+                        if not character.flee:
+                            char_img = pygame.transform.flip(char_img, True, False)
                         screen.blit(char_img, (cpu_start_pos[i][0], cpu_start_pos[i][1]))
                         character.Position = cpu_start_pos[i]
 

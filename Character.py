@@ -22,6 +22,7 @@ class Character:
 
     Position = (0, 0)
     CanBeReached = False
+    flee = False
 
     def __init__(self, name="Dave", attack=25, hp=100, init=50, deff=0, class_r=ClassEnumerate["shortDistance"], size=1):
         self.Name = name
@@ -48,7 +49,7 @@ class Character:
 
     def attack_character(self, target_char):
         if target_char.Alive:
-            target_char.currentHP -= self.Attack * (100-target_char.Deff)/100
+            target_char.currentHP -= self.Attack * ((100 * (100 - target_char.currentDeff)/100) - target_char.Deff)/100
             if target_char.currentHP <= 0:
                 target_char.Alive = False
                 target_char.currentHP = 0
