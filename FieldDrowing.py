@@ -64,11 +64,15 @@ def init(team1, team2):
                     for row in range(ROWS):
                         for team in pteam, cteam:
                             if len(characters) != 0:
-                                if team[column][row].Character == characters[0]:
-                                    team[column][row].isTaken = False
+                                if team[column][row].Character == characters[0] and characters[0].flee:
+                                    if characters[0].Size == 1:
+                                        team[column][row].isTaken = False
+                                    else:
+                                        team[0][row].isTaken = False
+                                        team[1][row].isTaken = False
                                     characters.__delitem__(0)
                                     refresh()
-                                    break
+
             if not check_win() == 0:
                 match = False
                 # screen.fill(bg_color)
@@ -84,8 +88,8 @@ def init(team1, team2):
                 check_team(pos, player, pteam)
                 check_team(pos, cpu, cteam)
                 button("Defense", (300, 100, 100, 45), button_color1, button_color2, "def")
-                button("Wait", (300, 150, 100, 45), button_color1, button_color2, "wait")
-                button("Flee", (300, 200, 100, 45), button_color1, button_color2, "flee")
+                button("   Wait", (300, 150, 100, 45), button_color1, button_color2, "wait")
+                button("   Flee", (300, 200, 100, 45), button_color1, button_color2, "flee")
         pygame.display.flip()
 
 
