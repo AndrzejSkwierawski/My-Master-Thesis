@@ -18,21 +18,5 @@ init(Spots, OponentSpots)
 export_team_to_xml(Spots, "exportTeam.xml")
 export_character_to_xml(Spots[0][0].Character, "export.xml")
 
-
-x = Character(name="Bary", hp=100)
-y = Character(name="Adison", hp=90, deff=50)
-# place_character_in_spot(Spots, [1, 1], x)
-# place_character_in_spot(OponentSpots, [1, 1], y)
-# place_character_in_spot(Spots, [0, 0], y)
-
-
 print_team_matrix(Spots)
 print_oponent_team(OponentSpots)
-
-
-# x.attack_character(Spots[1][2].Character)
-
-# x.attack_character(OponentSpots[0][1].Character)
-
-
-# TODO: method for checking if the characters is reachable for current character

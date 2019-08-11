@@ -22,7 +22,11 @@ character_bg_color = (192, 192, 192)
 hpbar_bgcolor = (232, 232, 111)
 hpbar_color = (255, 0, 0)
 current_char_clolor = (116, 32, 169)
+
 reachable_char_color = (85, 226, 41)
+
+button_color1 = (85, 226, 41)
+button_color2 = (109, 249, 66)
 
 font = pygame.font.SysFont("calibri", 20)
 
@@ -31,19 +35,20 @@ screen = pygame.display.set_mode((width, height))
 (player, cpu) = ([], [])
 
 
+def refresh():
+    screen.fill(bg_color)
+    print_bg()
+    print_player_team(pteam)
+    print_cpu_team(cteam)
+
 
 def init(team1, team2):
     global pteam
     global cteam
     pteam = team1
     cteam = team2
-    print(pteam)
-    print(cteam)
     running = True
-    screen.fill(bg_color)
-    print_bg()
-    print_player_team(pteam)
-    print_cpu_team(cteam)
+    refresh()
     set_move_order(pteam, cteam)
     match = True
     # print(player, cpu)
@@ -63,10 +68,12 @@ def init(team1, team2):
                 screen.blit(font.render("LOST", False, (0, 0, 0)), (0, 0))
 
         if match:
-            check_team(pos, player, pteam)
-            check_team(pos, cpu, cteam)
+            # button("Defense", (300, 100, 100, 45), button_color1, button_color2, pos)
             mark_current_character()
             mark_reachable(characters[0])
+            check_team(pos, player, pteam)
+            check_team(pos, cpu, cteam)
+
 
         pygame.display.flip()
 
@@ -74,7 +81,7 @@ def init(team1, team2):
 # checks if mouse is over character
 def check_team(cursor, team, matrix):
     for ch in team:
-        if is_cursor_over(cursor, ch):
+        if is_cursor_over(cursor, ch[0]):
             character = Character()
             if ch[1] == 0:
                 character = matrix[0][0]
@@ -93,15 +100,16 @@ def check_team(cursor, team, matrix):
 
                 event = pygame.event.get()
                 for event in event:
+                    print(event)
                     if event.type == pygame.MOUSEBUTTONUP and character.isTaken:
                         attack(character.Character)
 
 
 def is_cursor_over(cursor, rect):
-    left = rect[0][0]
-    right = rect[0][0] + rect[0][2]
-    up = rect[0][1]
-    down = rect[0][1] + rect[0][3]
+    left = rect[0]
+    right = rect[0] + rect[2]
+    up = rect[1]
+    down = rect[1] + rect[3]
     if left <= cursor[0] <= right and up <= cursor[1] <= down:
         return True
     else:
@@ -112,25 +120,20 @@ def attack(character):
     if character.CanBeReached:
         if characters[0].Class == 1 or characters[0].Class == 2:
             characters[0].attack_character(character)
-            characters.__delitem__(0)
         elif characters[0].Class == 3:
             for column in range(COLUMNS):
                 for row in range(ROWS):
                     for team in pteam, cteam:
                         if team[column][row].Character.CanBeReached:
                             characters[0].attack_character(team[column][row].Character)
-            characters.__delitem__(0)
+        characters.__delitem__(0)
 
     for each in characters:
         if not each.Alive:
             characters.remove(each)
     if len(characters) == 0:
         set_move_order(pteam, cteam)
-    screen.fill(bg_color)
-    print_bg()
-    print_player_team(pteam)
-    print_cpu_team(cteam)
-
+    refresh()
 
 
 def check_win():
@@ -216,12 +219,8 @@ def print_cpu_team(team):
             i += 1
 
 
-# TODO: extend this method
-# method prints information about character
-
-
 def print_info(character):
-    pygame.draw.rect(screen, character_bg_color, pygame.Rect(50, 450, 500, 100))
+    pygame.draw.rect(screen, character_bg_color, pygame.Rect(50, 450, 500, 120))
     char_img = pygame.image.load(character.Image)
     if character.Size == 1:
         char_img = pygame.transform.scale(char_img, (char_width, char_height))
@@ -232,19 +231,24 @@ def print_info(character):
     attack = font.render(("Attack: " + str(character.Attack)), False, (0, 0, 0))
     deff = font.render(("Defense: " + str(character.Deff)), False, (0, 0, 0))
     init = font.render(("Initiative: " + str(character.Init)), False, (0, 0, 0))
+    char_class = font.render(("Class: " + str([key for (key, value) in
+                                               character.ClassEnumerate.items() if value == character.Class][0])), False
+                             , (0, 0, 0))
     screen.blit(char_img, (50, 450))
     screen.blit(name, (260, 450))
     screen.blit(hp, (260, 470))
     screen.blit(attack, (260, 490))
     screen.blit(deff, (260, 510))
     screen.blit(init, (260, 530))
+    screen.blit(char_class, (260, 550))
 
 
 def mark_current_character():
-    if characters[0].Size == 1:
-        pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width, 10)))
-    else:
-        pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width2, 10)))
+    if not len(characters) == 0:
+        if characters[0].Size == 1:
+            pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width, 10)))
+        else:
+            pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width2, 10)))
 
 
 def mark_reachable(character):

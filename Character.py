@@ -15,6 +15,7 @@ class Character:
     Alive = True
 
     currentHP = HP
+    currentDeff = Deff
     # TODO: In Future version make also current init, Deff and so on
     # ----------------------------
     Image = 'images/warrior.jpg'
@@ -51,8 +52,15 @@ class Character:
             if target_char.currentHP <= 0:
                 target_char.Alive = False
                 target_char.currentHP = 0
+            print(self.Name, "attacked", target_char.Name)
         else:
             warnings.warn("THIS CHARACTER IS ALREADY DEAD")
+
+    def defence(self):
+        self.currentDeff = 50
+
+    def cancel_defence(self):
+        self.currentDeff = 0
 
     def set_image(self):
         if self.Class == 1:
