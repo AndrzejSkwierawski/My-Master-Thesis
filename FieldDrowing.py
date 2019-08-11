@@ -86,16 +86,7 @@ def init(team1, team2):
                 mark_current_character()
                 mark_reachable(characters[0])
 
-                if any(any(item.Character == characters[0] for item in items) for items in cteam):
-                    target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
-                    for column in range(COLUMNS):
-                        for row in range(ROWS):
-                            if pteam[column][row].Character.CanBeReached:
-                                if pteam[column][row].Character.currentHP <= target_character.currentHP:
-                                    target_character = pteam[column][row].Character
-                    attack(target_character)
-
-
+                cpu_algorithm()
 
                 check_team(pos, player, pteam)
                 check_team(pos, cpu, cteam)
@@ -104,6 +95,85 @@ def init(team1, team2):
                 button("   Flee", (300, 200, 100, 45), button_color1, button_color2, "flee")
         pygame.display.flip()
 
+
+def cpu_algorithm():
+    if any(any(item.Character == characters[0] for item in items) for items in cteam):
+        target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
+        prev_t_current_hp = target_character.currentHP
+        prev_t_deff = target_character.Deff
+        prev_t_current_deff = target_character.currentDeff
+        certain = []
+        for column in range(COLUMNS):
+            for row in range(ROWS):
+                if pteam[column][row].Character.CanBeReached:
+                    t_current_hp = pteam[column][row].Character.currentHP
+                    t_Deff = pteam[column][row].Character.Deff
+                    t_current_deff = pteam[column][row].Character.currentDeff
+
+                    if t_current_hp - characters[0].Attack * ((100 * (100 - t_current_deff) / 100) - t_Deff) / 100 <= 0:
+                        certain.append(pteam[column][row].Character)
+
+                    if t_current_hp - characters[0].Attack * (
+                            (100 * (100 - t_current_deff) / 100) - t_Deff) / 100 < prev_t_current_hp - characters[
+                        0].Attack * ((100 * (100 - prev_t_current_deff) / 100) - prev_t_deff) / 100:
+                        target_character = pteam[column][row].Character
+
+                        prev_t_current_hp = t_current_hp
+                        prev_t_deff = t_Deff
+                        prev_t_current_deff = t_current_deff
+        if len(certain) == 0:
+            attack(target_character)
+        else:
+            prev_t_current_hp = 0
+            prev_t_deff = 0
+            prev_t_current_deff = 0
+            for target in certain:
+                if target.currentHP - characters[0].Attack * ((100 * (100 - target.currentDeff) / 100) - target.Deff) /\
+                        100 > prev_t_current_hp - characters[0].Attack * ((100 * (100 - prev_t_current_deff) / 100) -
+                                                                          prev_t_deff) / 100:
+                    prev_t_current_hp = target.currentHP
+                    prev_t_deff = target.Deff
+                    prev_t_current_deff = target.currentDeff
+                    target_character = target
+            attack(target_character)
+
+
+def cpu_algorithm0():
+    if any(any(item.Character == characters[0] for item in items) for items in cteam):
+        target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
+        prev_t_current_hp = target_character.currentHP
+        prev_t_deff = target_character.Deff
+        prev_t_current_deff = target_character.currentDeff
+        for column in range(COLUMNS):
+            for row in range(ROWS):
+                if pteam[column][row].Character.CanBeReached:
+                    if pteam[column][row].Character.currentHP <= target_character.currentHP:
+                        target_character = pteam[column][row].Character
+        attack(target_character)
+
+
+def cpu_algorithm1():
+    if any(any(item.Character == characters[0] for item in items) for items in cteam):
+        target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
+        prev_t_current_hp = target_character.currentHP
+        prev_t_deff = target_character.Deff
+        prev_t_current_deff = target_character.currentDeff
+        for column in range(COLUMNS):
+            for row in range(ROWS):
+                if pteam[column][row].Character.CanBeReached:
+                    t_current_hp = pteam[column][row].Character.currentHP
+                    t_Deff = pteam[column][row].Character.Deff
+                    t_current_deff = pteam[column][row].Character.currentDeff
+
+                    if t_current_hp - characters[0].Attack * (
+                            (100 * (100 - t_current_deff) / 100) - t_Deff) / 100 < prev_t_current_hp - characters[
+                        0].Attack * ((100 * (100 - prev_t_current_deff) / 100) - prev_t_deff) / 100:
+                        target_character = pteam[column][row].Character
+
+                        prev_t_current_hp = t_current_hp
+                        prev_t_deff = t_Deff
+                        prev_t_current_deff = t_Deff
+        attack(target_character)
 
 # checks if mouse is over character
 def check_team(cursor, team, matrix):
