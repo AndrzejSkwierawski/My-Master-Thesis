@@ -85,6 +85,18 @@ def init(team1, team2):
                 characters[0].cancel_defence()
                 mark_current_character()
                 mark_reachable(characters[0])
+
+                if any(any(item.Character == characters[0] for item in items) for items in cteam):
+                    target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
+                    for column in range(COLUMNS):
+                        for row in range(ROWS):
+                            if pteam[column][row].Character.CanBeReached:
+                                if pteam[column][row].Character.currentHP <= target_character.currentHP:
+                                    target_character = pteam[column][row].Character
+                    attack(target_character)
+
+
+
                 check_team(pos, player, pteam)
                 check_team(pos, cpu, cteam)
                 button("Defense", (300, 100, 100, 45), button_color1, button_color2, "def")
