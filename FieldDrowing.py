@@ -67,9 +67,11 @@ def init(team1, team2):
                                 if team[column][row].Character == characters[0] and characters[0].flee:
                                     if characters[0].Size == 1:
                                         team[column][row].isTaken = False
+                                        print(team[column][row].Character.Name, "fled")
                                     else:
                                         team[0][row].isTaken = False
                                         team[1][row].isTaken = False
+                                        print(team[column][row].Character.Name, "fled")
                                     characters.__delitem__(0)
                                     refresh()
 
@@ -77,9 +79,9 @@ def init(team1, team2):
                 match = False
                 # screen.fill(bg_color)
                 if check_win() == 1:
-                    screen.blit(font.render("WIN", False, (0, 0, 0)), (0, 0))
+                    screen.blit(font.render("WIN", True, (0, 0, 0)), (0, 0))
                 elif check_win() == -1:
-                    screen.blit(font.render("LOST", False, (0, 0, 0)), (0, 0))
+                    screen.blit(font.render("LOST", True, (0, 0, 0)), (0, 0))
 
             if match and len(characters) != 0:
                 characters[0].cancel_defence()
@@ -175,6 +177,7 @@ def cpu_algorithm1():
                         prev_t_current_deff = t_Deff
         attack(target_character)
 
+
 # checks if mouse is over character
 def check_team(cursor, team, matrix):
     for ch in team:
@@ -211,7 +214,9 @@ def button(text, rect, color1, color2, action="none"):
                 characters[0].defence()
             elif action == "wait":
                 characters.append(characters[0])
+                characters[0].wait()
             elif action == "flee":
+                characters[0].start_flee()
                 characters[0].flee = True
             characters.__delitem__(0)
             if len(characters) == 0:

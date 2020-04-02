@@ -49,16 +49,25 @@ class Character:
 
     def attack_character(self, target_char):
         if target_char.Alive:
+            before_attack = target_char.currentHP
             target_char.currentHP -= self.Attack * ((100 * (100 - target_char.currentDeff)/100) - target_char.Deff)/100
+            after_attack = target_char.currentHP
             if target_char.currentHP <= 0:
                 target_char.Alive = False
                 target_char.currentHP = 0
-            print(self.Name, "attacked", target_char.Name)
+            print(self.Name, "attacked", target_char.Name, "(HP from", before_attack, "to", after_attack, ")")
         else:
             warnings.warn("THIS CHARACTER IS ALREADY DEAD")
 
     def defence(self):
+        print(self.Name, "is blocking")
         self.currentDeff = 50
+
+    def wait(self):
+        print(self.Name, "waits")
+
+    def start_flee(self):
+        print(self.Name, "flees")
 
     def cancel_defence(self):
         self.currentDeff = 0
