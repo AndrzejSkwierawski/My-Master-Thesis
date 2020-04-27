@@ -1,0 +1,20 @@
+<team>
+    <cl>
+        <name> Archer1 </name>
+        <attack> 20 </attack>
+        <hp> 40 </hp>
+        <init> 60 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </cl>
+    <bl>
+        <name> Magus1 </name>
+        <attack> 15 </attack>
+        <hp> 30 </hp>
+        <init> 40 </init>
+        <def> 0 </def>
+        <class> wholeArea </class>
+        <size> 1 </size>
+    </bl>
+</team>

@@ -42,7 +42,7 @@ def refresh():
     print_cpu_team(cteam)
 
 
-def init(team1, team2):
+def init(team1, team2, genome, nets, index):
     global pteam
     global cteam
     pteam = team1
@@ -80,8 +80,10 @@ def init(team1, team2):
                 # screen.fill(bg_color)
                 if check_win() == 1:
                     screen.blit(font.render("WIN", True, (0, 0, 0)), (0, 0))
+                    running = False
                 elif check_win() == -1:
                     screen.blit(font.render("LOST", True, (0, 0, 0)), (0, 0))
+                    running = False
 
             if match and len(characters) != 0:
                 characters[0].cancel_defence()
@@ -89,13 +91,59 @@ def init(team1, team2):
                 mark_reachable(characters[0])
 
                 cpu_algorithm()
+                AI_algorithm(genome, nets, index)
 
                 check_team(pos, player, pteam)
                 check_team(pos, cpu, cteam)
                 button("Defense", (300, 100, 100, 45), button_color1, button_color2, "def")
                 button("   Wait", (300, 150, 100, 45), button_color1, button_color2, "wait")
                 button("   Flee", (300, 200, 100, 45), button_color1, button_color2, "flee")
+        else:
+            running = False
         pygame.display.flip()
+
+def AI_algorithm(genomes, nets, id):
+    target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
+
+    targets = []
+    for column in range(COLUMNS):
+        for row in range(ROWS):
+            targets.append(cteam[column][row].Character)
+
+    output = nets[id].activate([char.HP for char in targets])
+    outcome = output.index(max(output))
+
+    if outcome == 0:
+        characters[0].defence()
+    elif outcome == 1:
+        characters[0].defence()
+        #characters.append(characters[0])
+        # characters[0].wait()
+    elif outcome == 2:
+        characters[0].start_flee()
+        characters[0].flee = True
+    else:
+        if outcome == 3:
+            target_character = cteam[0, 0].Character
+        elif outcome == 4:
+            target_character = cteam[0, 1].Character
+        elif outcome == 5:
+            target_character = cteam[0, 2].Character
+        elif outcome == 6:
+            target_character = cteam[1, 0].Character
+        elif outcome == 7:
+            target_character = cteam[1, 1].Character
+        elif outcome == 8:
+            target_character = cteam[1, 2].Character
+
+        if target_character.CanBeReached:
+            attack(target_character)
+        else:
+            characters[0].defence()
+    characters.__delitem__(0)
+
+
+
 
 
 def cpu_algorithm():
@@ -386,7 +434,7 @@ def mark_reachable(character):
     if any(any(item.Character == character for item in items) for items in pteam):
         char_team = pteam
         oponent_team = cteam
-    elif any(any(item.Character == character for item in items) for items in cteam):
+    else:
         char_team = cteam
         oponent_team = pteam
 
@@ -395,7 +443,7 @@ def mark_reachable(character):
             oponent_team[column][row].Character.CanBeReached = False
             char_team[column][row].Character.CanBeReached = False
 
-
+    current_position = [0, 0]
     if character.Class == 3 or character.Class == 2:
         for column in range(COLUMNS):
             for row in range(ROWS):
@@ -407,6 +455,8 @@ def mark_reachable(character):
             for row in range(ROWS):
                 if character == char_team[column][row].Character:
                     current_position = [column, row]
+                else:
+                    pass
         if current_position[0] == 0 and any(item.isTaken and item.Character.Alive for item in char_team[1]):
             print("Short Distance character is blocked by own teammate")
             # TODO: issue #6

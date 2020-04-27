@@ -1,0 +1,11 @@
+<team>
+    <cl>
+        <name> Archer </name>
+        <attack> 50 </attack>
+        <hp> 700 </hp>
+        <init> 65 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </cl>
+</team>

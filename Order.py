@@ -17,5 +17,8 @@ def set_move_order(team1, team2):
     random.shuffle(characters)
     characters.sort(key=lambda char: char.Init, reverse=True)
 
-    for character in characters:
-        print(character.Name, character.Init, character.Position)
+    # print("Moving order:")
+    # for character in characters:
+    #     print(character.Name, character.Init, [key for (key, value) in
+    #                                            character.ClassEnumerate.items() if value == character.Class][0])
+    # print("")
