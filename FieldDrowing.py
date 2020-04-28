@@ -34,6 +34,13 @@ screen = pygame.display.set_mode((width, height))
 
 (player, cpu) = ([], [])
 
+fitness = 0
+
+
+def change_fitness(value):
+    global fitness
+    fitness += value
+
 
 def refresh():
     screen.fill(bg_color)
@@ -42,9 +49,15 @@ def refresh():
     print_cpu_team(cteam)
 
 
-def init(team1, team2, genome, nets, index):
+def init(team1, team2, genome, nets, index, generation):
     global pteam
     global cteam
+    global fitness
+    window_title = "Generation: " + str(generation) + "; Genome: " + str(index + 1)
+    pygame.display.set_caption(window_title)
+    fitness = 0
+    pteam = None
+    cteam = None
     pteam = team1
     cteam = team2
     running = True
@@ -102,52 +115,54 @@ def init(team1, team2, genome, nets, index):
             running = False
         pygame.display.flip()
 
+    genome.fitness += fitness
+
+
 def AI_algorithm(genomes, nets, id):
-    target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
+    if not characters[0].OpponentTeam:
+        target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
 
-    targets = []
-    for column in range(COLUMNS):
-        for row in range(ROWS):
-            targets.append(cteam[column][row].Character)
+        targets = []
+        for column in range(COLUMNS):
+            for row in range(ROWS):
+                targets.append(cteam[column][row].Character)
 
-    output = nets[id].activate([char.HP for char in targets])
-    outcome = output.index(max(output))
+        output = nets[id].activate([char.currentHP for char in targets])
+        outcome = output.index(max(output))
 
-    if outcome == 0:
-        characters[0].defence()
-    elif outcome == 1:
-        characters[0].defence()
-        #characters.append(characters[0])
-        # characters[0].wait()
-    elif outcome == 2:
-        characters[0].start_flee()
-        characters[0].flee = True
-    else:
-        if outcome == 3:
-            target_character = cteam[0, 0].Character
-        elif outcome == 4:
-            target_character = cteam[0, 1].Character
-        elif outcome == 5:
-            target_character = cteam[0, 2].Character
-        elif outcome == 6:
-            target_character = cteam[1, 0].Character
-        elif outcome == 7:
-            target_character = cteam[1, 1].Character
-        elif outcome == 8:
-            target_character = cteam[1, 2].Character
-
-        if target_character.CanBeReached:
-            attack(target_character)
-        else:
+        if outcome == 0:
             characters[0].defence()
-    characters.__delitem__(0)
+        elif outcome == 1:
+            characters[0].defence()
+            #characters.append(characters[0])
+            # characters[0].wait()
+        elif outcome == 2:
+            characters[0].start_flee()
+            characters[0].flee = True
+        else:
+            if outcome == 3:
+                target_character = cteam[0, 0].Character
+            elif outcome == 4:
+                target_character = cteam[0, 1].Character
+            elif outcome == 5:
+                target_character = cteam[0, 2].Character
+            elif outcome == 6:
+                target_character = cteam[1, 0].Character
+            elif outcome == 7:
+                target_character = cteam[1, 1].Character
+            elif outcome == 8:
+                target_character = cteam[1, 2].Character
 
-
-
+            if target_character.CanBeReached:
+                takien_points = attack(target_character)
+                change_fitness(takien_points)
+            else:
+                characters[0].defence()
+        characters.__delitem__(0)
 
 
 def cpu_algorithm():
-    if any(any(item.Character == characters[0] for item in items) for items in cteam):
+    if characters[0].OpponentTeam:
         target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
         prev_t_current_hp = target_character.currentHP
         prev_t_deff = target_character.Deff
@@ -292,13 +307,13 @@ def is_cursor_over(cursor, rect):
 def attack(character):
     if character.CanBeReached:
         if characters[0].Class == 1 or characters[0].Class == 2:
-            characters[0].attack_character(character)
+            taken_points = characters[0].attack_character(character)
         elif characters[0].Class == 3:
             for column in range(COLUMNS):
                 for row in range(ROWS):
                     for team in pteam, cteam:
                         if team[column][row].Character.CanBeReached and team[column][row].Character.Alive:
-                            characters[0].attack_character(team[column][row].Character)
+                            taken_points = characters[0].attack_character(team[column][row].Character)
         characters.__delitem__(0)
 
     for each in characters:
@@ -307,6 +322,7 @@ def attack(character):
     if len(characters) == 0:
         set_move_order(pteam, cteam)
     refresh()
+    return taken_points
 
 
 def check_win():
@@ -443,7 +459,7 @@ def mark_reachable(character):
             oponent_team[column][row].Character.CanBeReached = False
             char_team[column][row].Character.CanBeReached = False
 
-    current_position = [0, 0]
+    current_position = character.Spot
     if character.Class == 3 or character.Class == 2:
         for column in range(COLUMNS):
             for row in range(ROWS):
@@ -451,14 +467,8 @@ def mark_reachable(character):
                     oponent_team[column][row].Character.CanBeReached = True
 
     elif character.Class == 1:
-        for column in range(COLUMNS):
-            for row in range(ROWS):
-                if character == char_team[column][row].Character:
-                    current_position = [column, row]
-                else:
-                    pass
         if current_position[0] == 0 and any(item.isTaken and item.Character.Alive for item in char_team[1]):
-            print("Short Distance character is blocked by own teammate")
+            print(character.Name, ", a Short Distance character is blocked by own teammate")
             # TODO: issue #6
         else:
             if any(item.isTaken and item.Character.Alive for item in oponent_team[1]):

@@ -4,15 +4,15 @@ import numpy as np
 import os
 import neat
 
-# Creating new table of spots
-Spots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
-OponentSpots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
-# making each spot free
-create_spots(Spots)
-create_spots(OponentSpots)
-# importing team from xml
-import_team_from_xml("testTeam.xml", Spots)
-import_team_from_xml("testTeamOP.xml", OponentSpots)
+# # Creating new table of spots
+# Spots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
+# OponentSpots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
+# # making each spot free
+# create_spots(Spots)
+# create_spots(OponentSpots)
+# # importing team from xml
+# import_team_from_xml("testTeam.xml", Spots)
+# import_team_from_xml("testTeamOP.xml", OponentSpots)
 
 # init(Spots, OponentSpots, 0)
 
@@ -21,10 +21,12 @@ import_team_from_xml("testTeamOP.xml", OponentSpots)
 #
 # print_team_matrix(Spots)
 # print_oponent_team(OponentSpots)
+generation = 0
 
 
 def eval_genoms(genomes, config):
-
+    global generation
+    generation += 1
     nets = []
     ge = []
     for genome_id, genome in enumerate(genomes):
@@ -41,10 +43,16 @@ def eval_genoms(genomes, config):
         create_spots(OponentSpots)
         # importing team from xml
         import_team_from_xml("testTeam.xml", Spots)
-        import_team_from_xml("testTeamOP.xml", OponentSpots)
+        import_team_from_xml("testTeamOP.xml", OponentSpots, True)
 
         print("Genome: ", genome_id)
-        init(Spots, OponentSpots, genome[1], nets, genome_id-1)
+        print_team_matrix(Spots)
+        print_oponent_team(OponentSpots)
+        init(Spots, OponentSpots, genome[1], nets, genome_id, generation)
+
+        print_team_matrix(Spots)
+        print_oponent_team(OponentSpots)
+
 
 def run(config_file):
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction,
@@ -56,8 +64,9 @@ def run(config_file):
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
 
-    winner = p.run(eval_genoms, 10)
+    winner = p.run(eval_genoms, 100)
 
+    print('\nBest genome:\n{!s}'.format(winner))
 
 if __name__ == '__main__':
     local_dir = os.path.dirname(__file__)

@@ -36,7 +36,7 @@
         <size> 1 </size>
     </bl>
     <br>
-        <name> Warrior1 </name>
+        <name> Warrior2 </name>
         <attack> 30 </attack>
         <hp> 90 </hp>
         <init> 50 </init>

@@ -21,8 +21,10 @@ class Character:
     Image = 'images/warrior.jpg'
 
     Position = (0, 0)
+    Spot = (0, 0)
     CanBeReached = False
     flee = False
+    OpponentTeam = False
 
     def __init__(self, name="Dave", attack=25, hp=100, init=50, deff=0, class_r=ClassEnumerate["shortDistance"], size=1):
         self.Name = name
@@ -56,8 +58,10 @@ class Character:
                 target_char.Alive = False
                 target_char.currentHP = 0
             print(self.Name, "attacked", target_char.Name, "(HP from", before_attack, "to", after_attack, ")")
+            return before_attack - after_attack
         else:
             warnings.warn("THIS CHARACTER IS ALREADY DEAD")
+            return 0
 
     def defence(self):
         print(self.Name, "is blocking")

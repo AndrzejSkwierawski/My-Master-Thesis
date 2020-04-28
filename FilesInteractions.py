@@ -43,12 +43,14 @@ def export_character_to_xml(character, xml):
     tree.write(xml)
 
 
-def import_team_from_xml(xml, team):
+def import_team_from_xml(xml, team, opponents=False):
     tree = ET.parse(xml)
     root = tree.getroot()
     if root.tag == "team":
         for child in root:
             character = Character()
+            if opponents:
+                character.OpponentTeam = True
             for option in child:
                 if option.tag == "name":
                     character.Name = option.text.strip()
@@ -69,16 +71,22 @@ def import_team_from_xml(xml, team):
                     character.Size = int(option.text.strip())
                 character.set_image()
             if child.tag == "tl":
+                character.Spot = [0, 0]
                 place_character_in_spot(team, [0, 0], character)
             elif child.tag == "tr":
+                character.Spot = [1, 0]
                 place_character_in_spot(team, [1, 0], character)
             elif child.tag == "cl":
+                character.Spot = [0, 1]
                 place_character_in_spot(team, [0, 1], character)
             elif child.tag == "cr":
+                character.Spot = [1, 1]
                 place_character_in_spot(team, [1, 1], character)
             elif child.tag == "bl":
+                character.Spot = [0, 2]
                 place_character_in_spot(team, [0, 2], character)
             elif child.tag == "br":
+                character.Spot = [1, 2]
                 place_character_in_spot(team, [1, 2], character)
     else:
         warnings.warn("INVALID FORMAT: cannot parse xml. Xml root name not recognised.", UserWarning)

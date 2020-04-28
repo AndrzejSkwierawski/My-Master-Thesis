@@ -33,8 +33,8 @@ def print_team_matrix(matrix):
     for row in range(ROWS):
         print("| ", end="")
         for column in range(COLUMNS):
-            if matrix[column][row].is_taken:
-                print(matrix[column][row].character.Name, end="")
+            if matrix[column][row].is_taken and matrix[column][row].character.Alive:
+                print(matrix[column][row].character.Name, matrix[column][row].character.currentHP, end="")
             else:
                 print("xxx", end="")
             print(" | ", end="")
@@ -47,8 +47,8 @@ def print_oponent_team(matrix):
     for row in range(ROWS):
         print("| ", end="")
         for column in range(COLUMNS-1, -1, -1):
-            if matrix[column][row].is_taken:
-                print(matrix[column][row].character.Name, end="")
+            if matrix[column][row].is_taken and matrix[column][row].character.Alive:
+                print(matrix[column][row].character.Name, matrix[column][row].character.currentHP, end="")
             else:
                 print("xxx", end="")
             print(" |", end="")
