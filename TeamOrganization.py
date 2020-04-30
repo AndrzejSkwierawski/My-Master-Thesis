@@ -29,31 +29,33 @@ def place_character_in_spot(team, spot, character):
 
 
 def print_team_matrix(matrix):
-    print("----------------------------")
+    print("--------------------------------------------------------")
     for row in range(ROWS):
-        print("| ", end="")
+        print("|", end="")
         for column in range(COLUMNS):
             if matrix[column][row].is_taken and matrix[column][row].character.Alive:
-                print(matrix[column][row].character.Name, matrix[column][row].character.currentHP, end="")
+                print(matrix[column][row].character.Name, matrix[column][row].character.currentHP, "/",
+                      matrix[column][row].character.HP, end="")
             else:
                 print("xxx", end="")
-            print(" | ", end="")
+            print("\t| ", end="")
         print()
-    print("----------------------------")
+    print("--------------------------------------------------------")
 
 
 def print_oponent_team(matrix):
-    print("----------------------------")
+    print("--------------------------------------------------------")
     for row in range(ROWS):
-        print("| ", end="")
+        print("|", end="")
         for column in range(COLUMNS-1, -1, -1):
             if matrix[column][row].is_taken and matrix[column][row].character.Alive:
-                print(matrix[column][row].character.Name, matrix[column][row].character.currentHP, end="")
+                print(matrix[column][row].character.Name, matrix[column][row].character.currentHP, "/",
+                      matrix[column][row].character.HP, end="")
             else:
                 print("xxx", end="")
-            print(" |", end="")
+            print("\t|", end="")
         print()
-    print("----------------------------")
+    print("--------------------------------------------------------")
 
 
 class Spot:

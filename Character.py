@@ -22,7 +22,7 @@ class Character:
 
     Position = (0, 0)
     Spot = (0, 0)
-    CanBeReached = False
+    CanBeReached = True
     flee = False
     OpponentTeam = False
 

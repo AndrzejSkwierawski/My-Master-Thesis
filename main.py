@@ -64,9 +64,10 @@ def run(config_file):
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
 
-    winner = p.run(eval_genoms, 100)
+    winner = p.run(eval_genoms, 10)
 
     print('\nBest genome:\n{!s}'.format(winner))
+
 
 if __name__ == '__main__':
     local_dir = os.path.dirname(__file__)

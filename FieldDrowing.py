@@ -56,8 +56,6 @@ def init(team1, team2, genome, nets, index, generation):
     window_title = "Generation: " + str(generation) + "; Genome: " + str(index + 1)
     pygame.display.set_caption(window_title)
     fitness = 0
-    pteam = None
-    cteam = None
     pteam = team1
     cteam = team2
     running = True
@@ -104,7 +102,7 @@ def init(team1, team2, genome, nets, index, generation):
                 mark_reachable(characters[0])
 
                 cpu_algorithm()
-                AI_algorithm(genome, nets, index)
+                # AI_algorithm(nets, index)
 
                 check_team(pos, player, pteam)
                 check_team(pos, cpu, cteam)
@@ -118,27 +116,35 @@ def init(team1, team2, genome, nets, index, generation):
     genome.fitness += fitness
 
 
-def AI_algorithm(genomes, nets, id):
-    if not characters[0].OpponentTeam:
+def AI_algorithm(nets, id):
+    if len(characters) != 0 and not characters[0].OpponentTeam:
         target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
 
         targets = []
+        team_mates = []
         for column in range(COLUMNS):
             for row in range(ROWS):
                 targets.append(cteam[column][row].Character)
+                team_mates.append(pteam[column][row].Character)
 
-        output = nets[id].activate([char.currentHP for char in targets])
+        nn_input = [characters[0].Attack] + [characters[0].Class] +[characters[0].Spot[0], characters[0].Spot[1]] +\
+                   [char.currentHP for char in targets] + [char.HP for char in targets] +\
+                   [char.currentHP for char in team_mates] + [char.HP for char in team_mates]
+        output = nets[id].activate(nn_input)
         outcome = output.index(max(output))
 
         if outcome == 0:
             characters[0].defence()
+            characters.__delitem__(0)
         elif outcome == 1:
             characters[0].defence()
             #characters.append(characters[0])
             # characters[0].wait()
+            characters.__delitem__(0)
         elif outcome == 2:
             characters[0].start_flee()
             characters[0].flee = True
+            characters.__delitem__(0)
         else:
             if outcome == 3:
                 target_character = cteam[0, 0].Character
@@ -153,16 +159,22 @@ def AI_algorithm(genomes, nets, id):
             elif outcome == 8:
                 target_character = cteam[1, 2].Character
 
-            if target_character.CanBeReached:
-                takien_points = attack(target_character)
-                change_fitness(takien_points)
+            if characters[0].Class == 2 or characters[0].Class == 3 or\
+                    (characters[0].Class == 1 and target_character.CanBeReached):
+                taken_points = attack(target_character)
+                if taken_points <= 0:
+                    change_fitness(-10)
+                else:
+                    change_fitness(taken_points)
+
             else:
                 characters[0].defence()
-        characters.__delitem__(0)
+                change_fitness(-100)  # fault, attack on non reachable character
+                characters.__delitem__(0)
 
 
 def cpu_algorithm():
-    if characters[0].OpponentTeam:
+    if len(characters) != 0 and  characters[0].OpponentTeam:
         target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
         prev_t_current_hp = target_character.currentHP
         prev_t_deff = target_character.Deff
@@ -187,7 +199,8 @@ def cpu_algorithm():
                         prev_t_deff = t_Deff
                         prev_t_current_deff = t_current_deff
         if len(certain) == 0:
-            attack(target_character)
+            takien_points = attack(target_character)
+            change_fitness(-takien_points)
         else:
             prev_t_current_hp = 0
             prev_t_deff = 0
@@ -200,7 +213,8 @@ def cpu_algorithm():
                     prev_t_deff = target.Deff
                     prev_t_current_deff = target.currentDeff
                     target_character = target
-            attack(target_character)
+            takien_points = attack(target_character)
+            change_fitness(-takien_points)
 
 
 def cpu_algorithm0():
@@ -305,6 +319,7 @@ def is_cursor_over(cursor, rect):
 
 
 def attack(character):
+    taken_points = 0
     if character.CanBeReached:
         if characters[0].Class == 1 or characters[0].Class == 2:
             taken_points = characters[0].attack_character(character)
@@ -312,9 +327,9 @@ def attack(character):
             for column in range(COLUMNS):
                 for row in range(ROWS):
                     for team in pteam, cteam:
-                        if team[column][row].Character.CanBeReached and team[column][row].Character.Alive:
-                            taken_points = characters[0].attack_character(team[column][row].Character)
-        characters.__delitem__(0)
+                        if team[column][row].Character.CanBeReached and team[column][row].Character.Alive and not \
+                                (team[column][row].Character.Size == 2 and column == 1):
+                            taken_points += characters[0].attack_character(team[column][row].Character)
 
     for each in characters:
         if not each.Alive:
@@ -322,6 +337,7 @@ def attack(character):
     if len(characters) == 0:
         set_move_order(pteam, cteam)
     refresh()
+    characters.__delitem__(0)
     return taken_points
 
 
