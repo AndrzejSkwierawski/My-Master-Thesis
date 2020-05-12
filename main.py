@@ -27,13 +27,11 @@ generation = 0
 def eval_genoms(genomes, config):
     global generation
     generation += 1
-    nets = []
-    ge = []
-    for genome_id, genome in enumerate(genomes):
-        genome[1].fitness = 0
-        net = neat.nn.FeedForwardNetwork.create(genome[1], config)
-        nets.append(net)
-        ge.append(genome[1])
+    genome_of_generation = 0
+    for genome_id, genome in genomes:
+        genome_of_generation += 1
+        genome.fitness = 2000
+        net = neat.nn.FeedForwardNetwork.create(genome, config)
 
         # Creating new table of spots
         Spots = np.empty(shape=(COLUMNS, ROWS), dtype=object)
@@ -43,15 +41,17 @@ def eval_genoms(genomes, config):
         create_spots(OponentSpots)
         # importing team from xml
         import_team_from_xml("testTeam.xml", Spots)
-        import_team_from_xml("testTeamOP.xml", OponentSpots, True)
+        import_team_from_xml("testTeamOP2.xml", OponentSpots, True)
 
-        print("Genome: ", genome_id)
-        print_team_matrix(Spots)
-        print_oponent_team(OponentSpots)
-        init(Spots, OponentSpots, genome[1], nets, genome_id, generation)
+        # print("Genome: ", genome_id)
+        # print_team_matrix(Spots)
+        # print_oponent_team(OponentSpots)
+        init(Spots, OponentSpots, genome, net, genome_of_generation, generation)
 
-        print_team_matrix(Spots)
-        print_oponent_team(OponentSpots)
+        # print_team_matrix(Spots)
+        # print_oponent_team(OponentSpots)
+        print("Genome", genome_id, "fitness:", genome.fitness)
+        genome.fitness = 1.0 / genome.fitness
 
 
 def run(config_file):
