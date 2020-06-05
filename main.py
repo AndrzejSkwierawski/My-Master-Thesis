@@ -50,7 +50,7 @@ def eval_genoms(genomes, config):
 
         # print_team_matrix(Spots)
         # print_oponent_team(OponentSpots)
-        print("Genome", genome_id, "fitness:", genome.fitness)
+        print("Genome", genome_id, "fitness:", genome.fitness, "\t1/fitness:", 1.0 / genome.fitness)
         genome.fitness = 1.0 / genome.fitness
 
 
