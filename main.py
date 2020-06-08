@@ -26,6 +26,7 @@ generation = 0
 number_of_generations = 10
 teamP = 'testTeam.xml'
 teamO = 'testTeamOP.xml'
+graphic = False
 
 
 def eval_genoms(genomes, config):
@@ -49,7 +50,7 @@ def eval_genoms(genomes, config):
 
         # print_team_matrix(Spots)
         # print_oponent_team(OpponentSpots)
-        init(Spots, OpponentSpots, genome, net, genome_of_generation, generation)
+        init(Spots, OpponentSpots, genome, net, genome_of_generation, generation, graphic)
 
         # print_team_matrix(Spots)
         # print_oponent_team(OpponentSpots)
@@ -79,6 +80,7 @@ def parse_args():
     parser.add_argument('--gens', '-g', type=int, default=10, help='Number of generations')
     parser.add_argument('--teamp', '-p', type=str, default='testTeam.xml', help='File with player team')
     parser.add_argument('--teamo', '-o', type=str, default='testTeamOP.xml', help='File with opponent team')
+    parser.add_argument('--image', '-i', action='store_true', help='If set, graphic interface will be shown')
 
     args = parser.parse_args()
     if args.gens:
@@ -93,6 +95,10 @@ def parse_args():
         print("Player team:", args.teamo)
         global teamO
         teamO = args.teamo
+    if args.image:
+        print("Graphic interface?:", args.image)
+        global graphic
+        graphic = args.image
 
 
 if __name__ == '__main__':

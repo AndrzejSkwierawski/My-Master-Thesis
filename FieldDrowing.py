@@ -1,7 +1,8 @@
 import pygame
-from TeamOrganization import *
 from Order import *
 pygame.init()
+
+graphic = True
 
 (width, height) = (800, 600)
 char_height = 100
@@ -43,13 +44,16 @@ def change_fitness(value):
 
 
 def refresh():
-    screen.fill(bg_color)
-    print_bg()
-    print_player_team(pteam)
-    print_cpu_team(cteam)
+    if graphic:
+        screen.fill(bg_color)
+        print_bg()
+        print_player_team(pteam)
+        print_cpu_team(cteam)
 
 
-def init(team1, team2, genome, net, index, generation):
+def init(team1, team2, genome, net, index, generation, graphical=True):
+    global graphic
+    graphic = graphical
     global pteam
     global cteam
     global fitness
@@ -62,7 +66,6 @@ def init(team1, team2, genome, net, index, generation):
     refresh()
     set_move_order(pteam, cteam)
     match = True
-    # print(player, cpu)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -112,9 +115,10 @@ def init(team1, team2, genome, net, index, generation):
 
                 check_team(pos, player, pteam)
                 check_team(pos, cpu, cteam)
-                button("Defense", (300, 100, 100, 45), button_color1, button_color2, "def")
-                button("   Wait", (300, 150, 100, 45), button_color1, button_color2, "wait")
-                button("   Flee", (300, 200, 100, 45), button_color1, button_color2, "flee")
+                if graphic:
+                    button("Defense", (300, 100, 100, 45), button_color1, button_color2, "def")
+                    button("   Wait", (300, 150, 100, 45), button_color1, button_color2, "wait")
+                    button("   Flee", (300, 200, 100, 45), button_color1, button_color2, "flee")
         else:
             running = False
         pygame.display.flip()
@@ -455,11 +459,12 @@ def print_info(character):
 
 
 def mark_current_character():
-    if not len(characters) == 0:
-        if characters[0].Size == 1:
-            pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width, 10)))
-        else:
-            pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width2, 10)))
+    if graphic:
+        if not len(characters) == 0:
+            if characters[0].Size == 1:
+                pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width, 10)))
+            else:
+                pygame.draw.rect(screen, current_char_clolor, pygame.Rect(characters[0].Position, (char_width2, 10)))
 
 
 def mark_reachable(character):
@@ -516,13 +521,13 @@ def mark_reachable(character):
                         (oponent_team[line][1].isTaken and oponent_team[line][1].Character.Alive) and not \
                         (oponent_team[line][2].isTaken and oponent_team[line][2].Character.Alive):
                     oponent_team[line][0].Character.CanBeReached = True
-
-    for column in range(COLUMNS):
-        for row in range(ROWS):
-            if oponent_team[column][row].Character.CanBeReached:
-                if oponent_team[column][row].Character.Size == 1:
-                    pygame.draw.rect(screen, reachable_char_color, pygame.Rect(oponent_team[column][row].Character.
-                                                                               Position, (char_width, 10)))
-                else:
-                    pygame.draw.rect(screen, reachable_char_color, pygame.Rect(oponent_team[column][row].Character.
-                                                                               Position, (char_width2, 10)))
+    if graphic:
+        for column in range(COLUMNS):
+            for row in range(ROWS):
+                if oponent_team[column][row].Character.CanBeReached:
+                    if oponent_team[column][row].Character.Size == 1:
+                        pygame.draw.rect(screen, reachable_char_color, pygame.Rect(oponent_team[column][row].Character.
+                                                                                   Position, (char_width, 10)))
+                    else:
+                        pygame.draw.rect(screen, reachable_char_color, pygame.Rect(oponent_team[column][row].Character.
+                                                                                   Position, (char_width2, 10)))
