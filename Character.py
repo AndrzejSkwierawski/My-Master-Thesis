@@ -81,7 +81,13 @@ class Character:
     def set_image(self):
         if self.Class == 1:
             self.Image = 'images/warrior1.jpg'
+            if self.Size == 2:
+                self.Image = 'images/warrior2.jpg'
         elif self.Class == 2:
             self.Image = 'images/archer1.jpg'
+            if self.Size == 2:
+                self.Image = 'images/archer2.jpg'
         elif self.Class == 3:
             self.Image = 'images/mage1.jpg'
+            if self.Size == 2:
+                self.Image = 'images/mage2.jpg'

@@ -109,7 +109,7 @@ def init(team1, team2, genome, net, index, generation, graphical=True):
                 if characters[0].OpponentTeam:
                     cpu_algorithm()
                 else:
-                    AI_algorithm(net)
+                    ai_algorithm(net)
                 if len(characters) == 0:
                     set_move_order(pteam, cteam)
 
@@ -126,7 +126,7 @@ def init(team1, team2, genome, net, index, generation, graphical=True):
     genome.fitness += fitness
 
 
-def AI_algorithm(net):
+def ai_algorithm(net):
     if len(characters) != 0 and not characters[0].OpponentTeam:
         target_character = Character(name="Dave", attack=0, hp=100000000000, init=0, deff=100)
 
@@ -138,8 +138,13 @@ def AI_algorithm(net):
                 team_mates.append(pteam[column][row].Character)
 
         nn_input = [characters[0].Attack] + [characters[0].Class] + [characters[0].Spot[0], characters[0].Spot[1]] +\
-                   [char.currentHP for char in targets] + [char.HP for char in targets] +\
-                   [char.currentHP for char in team_mates] + [char.HP for char in team_mates]
+                   [char.currentHP for char in targets] + [char.currentHP for char in team_mates] +\
+                   [char.HP for char in targets] + [char.HP for char in team_mates] +\
+                   [char.Attack for char in targets] + [char.Attack for char in team_mates] +\
+                   [char.Alive for char in targets] + [char.Alive for char in team_mates] +\
+                   [char.Class for char in targets] + [char.Class for char in team_mates] +\
+                   [char.Init for char in targets] + [char.Init for char in team_mates]
+        #             76 inputs
         output = net.activate(nn_input)
         outcome = output.index(max(output))
         # print("\noutput:", output)
