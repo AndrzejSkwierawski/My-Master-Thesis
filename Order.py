@@ -5,13 +5,14 @@ characters = []
 
 
 def set_move_order(team1, team2):
+    characters.clear()
     for column in range(COLUMNS):
         for row in range(ROWS):
             if team1[column][row].Character.Size == 1 or (team1[column][row].Character.Size == 2 and column != 0):
-                if team1[column][row].is_taken and team1[column][row].Character.Alive:
+                if team1[column][row].is_taken and team1[column][row].character.Alive:
                     characters.append(team1[column][row].Character)
             if team2[column][row].Character.Size == 1 or (team2[column][row].Character.Size == 2 and column != 0):
-                if team2[column][row].is_taken and team2[column][row].Character.Alive:
+                if team2[column][row].is_taken and team2[column][row].character.Alive:
                     characters.append(team2[column][row].Character)
 
     random.shuffle(characters)

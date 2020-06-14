@@ -57,7 +57,7 @@ class Character:
             if target_char.currentHP <= 0:
                 target_char.Alive = False
                 target_char.currentHP = 0
-            # print(self.Name, "attacked", target_char.Name, "(HP from", before_attack, "to", after_attack, ")")
+            print(self.Name, "attacked", target_char.Name, "(HP from", before_attack, "to", after_attack, ")")
             return before_attack - after_attack
         else:
             warnings.warn("THIS CHARACTER IS ALREADY DEAD")

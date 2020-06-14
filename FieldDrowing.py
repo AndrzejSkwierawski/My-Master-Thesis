@@ -81,11 +81,11 @@ def init(team1, team2, genome, net, index, generation, graphical=True):
                                 if team[column][row].Character == characters[0] and characters[0].flee:
                                     if characters[0].Size == 1:
                                         team[column][row].isTaken = False
-                                        # print(team[column][row].Character.Name, "fled")
+                                        print(team[column][row].Character.Name, "fled")
                                     else:
                                         team[0][row].isTaken = False
                                         team[1][row].isTaken = False
-                                        # print(team[column][row].Character.Name, "fled")
+                                        print(team[column][row].Character.Name, "fled")
                                     characters.__delitem__(0)
                                     refresh()
 
@@ -94,10 +94,12 @@ def init(team1, team2, genome, net, index, generation, graphical=True):
                 # screen.fill(bg_color)
                 if check_win() == 1:
                     screen.blit(font.render("WIN", True, (0, 0, 0)), (0, 0))
+                    print("WIN")
                     change_fitness(1000)
                     running = False
                 elif check_win() == -1:
                     screen.blit(font.render("LOST", True, (0, 0, 0)), (0, 0))
+                    print("LOST")
                     change_fitness(-500)
                     running = False
 
