@@ -1,0 +1,11 @@
+<team>
+    <cr>
+        <name> Orc </name>
+        <attack> 70 </attack>
+        <hp> 235 </hp>
+        <init> 30 </init>
+        <def> 0 </def>
+        <class> shortDistance </class>
+        <size> 2 </size>
+    </cr>
+</team>

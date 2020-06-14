@@ -1,0 +1,47 @@
+<team>
+    <tl>
+        <name> Archer1 </name>
+        <attack> 25 </attack>
+        <hp> 50 </hp>
+        <init> 70 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </tl>
+    <cl>
+        <name> Mage </name>
+        <attack> 20 </attack>
+        <hp> 40 </hp>
+        <init> 30 </init>
+        <def> 0 </def>
+        <class> wholeArea </class>
+        <size> 1 </size>
+    </cl>
+    <cr>
+        <name> Warior1 </name>
+        <attack> 40 </attack>
+        <hp> 70 </hp>
+        <init> 50 </init>
+        <def> 0 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </cr>
+    <br>
+        <name> Warior2 </name>
+        <attack> 40 </attack>
+        <hp> 70 </hp>
+        <init> 50 </init>
+        <def> 0 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </br>
+    <bl>
+        <name> Archer2 </name>
+        <attack> 25 </attack>
+        <hp> 50 </hp>
+        <init> 70 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </bl>
+</team>

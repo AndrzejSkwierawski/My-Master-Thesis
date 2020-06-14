@@ -1,0 +1,29 @@
+<team>
+    <tr>
+        <name> Slave1 </name>
+        <attack> 25 </attack>
+        <hp> 35 </hp>
+        <init> 45 </init>
+        <def> 0 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </tr>
+    <cl>
+        <name> Evil Mage </name>
+        <attack> 60 </attack>
+        <hp> 40 </hp>
+        <init> 40 </init>
+        <def> 0 </def>
+        <class> wholeArea </class>
+        <size> 1 </size>
+    </cl>
+    <br>
+        <name> Slave2 </name>
+        <attack> 25 </attack>
+        <hp> 35 </hp>
+        <init> 45 </init>
+        <def> 0 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </br>
+</team>

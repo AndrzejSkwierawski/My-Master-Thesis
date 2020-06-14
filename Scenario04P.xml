@@ -1,0 +1,29 @@
+<team>
+    <cr>
+        <name> Gimli </name>
+        <attack> 25 </attack>
+        <hp> 320 </hp>
+        <init> 35 </init>
+        <def> 5 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </cr>
+    <tl>
+        <name> Legolas </name>
+        <attack> 17 </attack>
+        <hp> 260 </hp>
+        <init> 60 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </tl>
+    <bl>
+        <name> Gandalf </name>
+        <attack> 25 </attack>
+        <hp> 500 </hp>
+        <init> 35 </init>
+        <def> 5 </def>
+        <class> wholeArea </class>
+        <size> 1 </size>
+    </bl>
+</team>

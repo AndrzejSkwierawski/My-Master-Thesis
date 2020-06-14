@@ -1,0 +1,38 @@
+<team>
+    <tr>
+        <name> Thug1 </name>
+        <attack> 25 </attack>
+        <hp> 120 </hp>
+        <init> 35 </init>
+        <def> 5 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </tr>
+    <cl>
+        <name> Hunter </name>
+        <attack> 17 </attack>
+        <hp> 70 </hp>
+        <init> 60 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </cl>
+    <cr>
+        <name> Thug2 </name>
+        <attack> 25 </attack>
+        <hp> 100 </hp>
+        <init> 35 </init>
+        <def> 5 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </cr>
+    <br>
+        <name> Thug3 </name>
+        <attack> 25 </attack>
+        <hp> 100 </hp>
+        <init> 35 </init>
+        <def> 5 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </br>
+</team>

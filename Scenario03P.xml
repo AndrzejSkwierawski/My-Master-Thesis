@@ -1,0 +1,38 @@
+<team>
+    <tl>
+        <name> Archer1 </name>
+        <attack> 15 </attack>
+        <hp> 45 </hp>
+        <init> 90 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </tl>
+    <cl>
+        <name> Archer2 </name>
+        <attack> 15 </attack>
+        <hp> 45 </hp>
+        <init> 90 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </cl>
+    <cr>
+        <name> Warrior1 </name>
+        <attack> 35 </attack>
+        <hp> 70 </hp>
+        <init> 50 </init>
+        <def> 0 </def>
+        <class> shortDistance </class>
+        <size> 1 </size>
+    </cr>
+    <bl>
+        <name> Archer3 </name>
+        <attack> 15 </attack>
+        <hp> 45 </hp>
+        <init> 90 </init>
+        <def> 0 </def>
+        <class> longDistance </class>
+        <size> 1 </size>
+    </bl>
+</team>
