@@ -18,6 +18,8 @@ hpbar_diference = 100
 player_start_pos = [(50, 50), (50, 180), (50, 310), (150, 50), (150, 180), (150, 310)]
 cpu_start_pos = [(550, 50), (550, 180), (550, 310), (450, 50), (450, 180), (450, 310)]
 
+bg_image = pygame.image.load("images/bg.jpeg")
+bg_image = pygame.transform.scale(bg_image, (width, height))
 bg_color = (255, 255, 255)
 character_bg_color = (192, 192, 192)
 hpbar_bgcolor = (232, 232, 111)
@@ -46,6 +48,7 @@ def change_fitness(value):
 def refresh():
     if graphic:
         screen.fill(bg_color)
+        screen.blit(bg_image, (0, 0))
         print_bg()
         print_player_team(pteam)
         print_cpu_team(cteam)
